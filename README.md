@@ -17,7 +17,7 @@ The experiment consists of four main steps:
 1. Navigate to [Zinc20 Data](https://zinc20.docking.org/tranches/home/).
 2. Click on "3D".
 3. React "Anodyne".
-4. Set Purch to "Wait OK", ph to "Ref Mid", Charge to "0 +1 +2".
+4. Set Purch to "Wait OK", ph to "Ref Mid", Charge to "0 +1".
 5. Select all options on the grid from molecular weight 250-450 daltons and logp -1 to -5.
 6. Download the selected files.
 7. Concatenate the downloaded files into one text file.
@@ -39,7 +39,7 @@ The experiment consists of four main steps:
 
 ### Docking Evaluation
 
-1. Dock the molecules in the original unencoded `reserved.txt` to evaluate their binding to the selected molecular target (D2DR) using `dock_finetuning_data.py` to evaluate good vs bad molecules for the purposes of finetuning with SFT and DPO. 
+1. Dock the molecules in the original unencoded `reserved.txt` to evaluate their binding to the selected molecular target (D2DR) using `dock_data_for_finetuning.py` to evaluate good vs bad molecules for the purposes of finetuning with SFT and DPO. This expects a file "smile.txt" in the docking folder. Make a copy of the original reserved.txt, rename it to smiles.txt and place it here. 
 2. This will output a JSON file of molecules and their docking scores.
 
 ### Fine-tuning Process
@@ -54,9 +54,10 @@ The experiment consists of four main steps:
    - To construct pairs based on molecular similarity, run `create_similar_pairs.ipynb` using the same JSON file. 
 2. Each method will output a JSON file containing pairs that, along with `vocab.txt`, can be used with `dpo_trainer.ipynb`.
 
+
 ### Results Replication
 
-1. Choose all dockers with above 98% uniqueness.
-2. Run `prep.py` in the finetuning folder to append validity to the names.
-3. On all hyperparameter combinations with above 90% validity, run `dock_finetuning_data.py` in `Docking/Scripts` to get the final experiment results.
+1. Choose all dockers with above 98% uniqueness, and place them in folders based on the experiment (we ran DPO-similar-pairs, DPO-similar-half-pairs, DPO-random-pairs, DPO-random-halfdata-pairs, SFT, and Baseline (non finetuned model). Make sure each folder name starts with dpo_ or sft_. Place baseline in any of the folders. 
+2. Run `prep.py` in the finetuning folder to append validity to the names in each folder. 
+3. On all hyperparameter combinations with above 90% validity, keep them in their folder starting with dpo_ or sft_ and move all the folders to a folder containing `dock_experiments.py` from `Docking/Scripts` and run it to get the final experiment results.
 
