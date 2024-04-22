@@ -1,4 +1,4 @@
-# Reproducing Machine Learning Experiments
+# Reproducing MAISTRAL Experiments
 
 This README outlines the steps to reproduce a set of machine learning experiments from our GitHub repository.
 
@@ -29,28 +29,29 @@ The experiment consists of four main steps:
 1. In the Pre-training folder, run `multithreaded_AIS_converter.py` on both `train.txt` and `reserved.txt`.
 2. Follow the instructions provided by the script.
 3. Concatenate the generated vocab files into `vocab.txt`, avoiding duplication.
+4. Unzip the outputted files to get the encoded training textfile and reserved textfile and name it train.text
 
 ### Pre-training
 
-1. Run `pretrain_maistral.ipynb` using the generated training file (`train.txt`) and `vocab.txt`.
+1. Run `pretrain_maistral.ipynb` using the generated training file containing molecules in AIS form (`train.txt`) and the vocab file`vocab.txt`.
 
 ## Fine-tuning
 
 ### Docking Evaluation
 
-1. Dock the molecules in `reserved.txt` to evaluate their binding to the molecular target (D2DR) using `dock_finetuning_data.py`.
+1. Dock the molecules in the original unencoded `reserved.txt` to evaluate their binding to the selected molecular target (D2DR) using `dock_finetuning_data.py` to evaluate good vs bad molecules for the purposes of finetuning with SFT and DPO. 
 2. This will output a JSON file of molecules and their docking scores.
 
 ### Fine-tuning Process
 
-1. Run `sft_trainer.ipynb` on the generated JSON file along with `vocab.txt`.
-2. The notebook will output text files with hyperparameters as filenames, along with metrics such as uniqueness, novelty, and internal diversity.
+1. Run `sft_trainer.ipynb` on the generated JSON file from Docking Evaluation along with `vocab.txt`.
+2. The notebook will output text files with hyperparameters as filenames, along with metrics such as uniqueness, novelty, and internal diversity appended to the filename. The contents will be a set of 250 sampled outputs. 
 
 ### DPO Fine-tuning
 
 1. Construct pairs of molecules for DPO:
    - To construct random pairs, run `random_pairing.py` with `vocab.txt` and the JSON file used in `sft_trainer.ipynb`.
-   - To construct pairs based on molecular similarity, run `create_similar_pairs.ipynb`.
+   - To construct pairs based on molecular similarity, run `create_similar_pairs.ipynb` using the same JSON file. 
 2. Each method will output a JSON file containing pairs that, along with `vocab.txt`, can be used with `dpo_trainer.ipynb`.
 
 ### Results Replication
