@@ -1,4 +1,4 @@
-# Reproducing MAISTRAL Experiments
+# Reproducing MAISTRL Experiments
 
 This README outlines the steps to reproduce a set of machine learning experiments from our GitHub repository.
 
