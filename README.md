@@ -61,3 +61,12 @@ The experiment consists of four main steps:
 2. Run `prep.py` in the finetuning folder to append validity to the names in each folder. 
 3. On all hyperparameter combinations with above 90% validity, keep them in their folder starting with dpo_ or sft_ and move all the folders to a folder containing `dock_experiments.py` from `Docking/Scripts` and run it to get the final experiment results.
 
+Here are the hyperparameters we found to work the best:
+| Method             | # Epochs| Beta    | Alpha   |
+|--------------------|---------|---------|---------|
+| Baseline           | n/a     | n/a     | n/a     |
+| DPO                | 3       | 0.5     | 0.00005 |
+| DPO half           | 2       | 0.3     | 0.0001  |
+| DPO random         | 1       | 0.5     | 0.00005 |
+| DPO random half    | 1       | 0.5     | 0.00005 |
+| SFT                | 3       | n/a     | 0.0005  |
